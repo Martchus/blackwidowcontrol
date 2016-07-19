@@ -19,6 +19,7 @@ LOG=sys.stderr.write
 
 class blackwidow(object):
 	kernel_driver_detached = False
+	detected_keyboard = None
 
 	def __init__(self):
 		self.device = usb.core.find(idVendor=VENDOR_ID, idProduct=PRODUCT_ID_BLACK_WIDOW)
@@ -30,12 +31,14 @@ class blackwidow(object):
 				return
 			else:
 				LOG("Found device Black Widow 2013.\n")
+				detected_keyboard = PRODUCT_ID_BLACK_WIDOW_2013
 		else:
 			LOG("Found device Black Widow.\n")
+			detected_keyboard = PRODUCT_ID_BLACK_WIDOW
 
 		if self.device.is_kernel_driver_active(USB_INTERFACE):
 			LOG("Kernel driver active. Detaching it.\n")
-		
+
 		self.device.detach_kernel_driver(USB_INTERFACE)
 		self.kernel_driver_detached = True
 
@@ -84,44 +87,95 @@ class blackwidow(object):
 			_send(c)
 
 def main():
-	init_new  = '0200 0403'
-	init_old  = '0200 0402'
-	pulsate = '0303 0201 0402'
-	bright  = '0303 0301 04ff'
-	normal  = '0303 0301 04a8'
-	dim     = '0303 0301 0454'
-	off     = '0303 0301 0400'
-    
+	init_new    = '0200 0403'
+	init_old    = '0200 0402'
+	no_pulsate  = '0303 0201 0400'
+	pulsate     = '0303 0201 0402'
+	brightness  = '0303 0301 04'
+	backlight   = '0303 0301 05'
+	gamemode    = '0303 0001 08'
+
 	usage = "usage: %prog [options]"
 	parser = OptionParser(usage=usage)
 	parser.add_option("-i", "--init", action="store_true", dest="init", default=False, help="initiates the functionality of macro keys")
-	parser.add_option("-l", "--set-led", type="string", dest="led", default="unmodified", help="sets the status of the led (pulsate, bright, normal, dim, off)", metavar="STATUS")
+	parser.add_option("-l", "--set-led", type="string", dest="led", default="unmodified", help="sets the status of the led (pulsate, bright, normal, dim, off or number between 0 - 255)", metavar="STATUS")
+	parser.add_option("-b", "--set-backlight", type="string", dest="backlight", default="unmodified", help="sets the status of the backlight (pulsate, bright, normal, dim, off or number between 0 - 255)")
+	parser.add_option("-g", "--set-game-mode", type="string", dest="gamemode", default="unmodified", help="sets whether the game mode is enabled (on/off)")
 	(options, args) = parser.parse_args()
-		
+
 	bw = blackwidow()
 	if bw.device_found():
+		# enable macro keys
 		if options.init == True:
 			LOG("Sending initiation command\n")
 			bw.send(init_old)
+
+		# set led status (doesn't work with BlackWidow 2016 yet)
 		if options.led == "unmodified":
-			()
+			pass
 		elif options.led == "pulsate":
 			LOG("Sending led pulsate command\n")
 			bw.send(pulsate)
 		elif options.led == "bright":
 			LOG("Sending led bright command\n")
-			bw.send(bright)
+			bw.send(no_pulsate + brightness + 'FF')
 		elif options.led == "normal":
 			LOG("Sending led normal command\n")
-			bw.send(normal)
+			bw.send(no_pulsate + brightness + 'a8')
 		elif options.led == "dim":
 			LOG("Sending led dim command\n")
-			bw.send(dim)
+			bw.send(no_pulsate + brightness + '54')
 		elif options.led == "off":
 			LOG("Sending led off command\n")
-			bw.send(off)
+			bw.send(no_pulsate + brightness + '00')
 		else:
-			LOG("Given led status is unknown and will be ignored.\n")
+			try:
+				brightness_level = int(options.led)
+				if brightness_level >= 0 and brightness_level <= 0xFF:
+					bw.send(no_pulsate + brightness + "{0:#0{1}x}".format(brightness_level,4)[2:])
+				else:
+					raise ValueError
+			except ValueError:
+				LOG("Specified value for led status \"%s\" is unknown and will be ignored.\n" % options.led)
+
+		# experimantal: set backlight (BlackWidow 2016 only)
+		if options.backlight == "unmodified":
+			pass
+		else:
+			if False: # condition for BlackWidow 2016
+				if options.backlight == "bright":
+					LOG("Sending led bright command\n")
+					bw.send(backlight + 'FF')
+				elif options.backlight == "normal":
+					LOG("Sending led normal command\n")
+					bw.send(backlight + 'a8')
+				elif options.backlight == "dim":
+					LOG("Sending led dim command\n")
+					bw.send(backlight + '54')
+				elif options.backlight == "off":
+					LOG("Sending led off command\n")
+					bw.send(backlight + '00')
+				else:
+					try:
+						brightness_level = int(options.backlight)
+						if brightness_level >= 0 and brightness_level <= 0xFF:
+							bw.send(brightness + "{0:#0{1}x}".format(brightness_level,4)[2:])
+						else:
+							raise ValueError
+					except ValueError:
+						LOG("Specified value for backlight status \"%s\" is unknown and will be ignored.\n" % options.led)
+			else:
+				LOG("Setting the backlight is not supported by the detected keyboard.")
+
+		# enable/disable game mode
+		if options.gamemode == "unmodified":
+			pass
+		if options.gamemode == "on":
+			bw.send(gamemode + '01')
+		elif options.gamemode == "off":
+			bw.send(gamemode + '00')
+		else:
+			LOG("Specified value for game mode is unknown and will be ignored.\n")
 
 if __name__ == '__main__':
-    main()
+	main()
