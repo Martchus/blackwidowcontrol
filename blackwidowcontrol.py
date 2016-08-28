@@ -27,17 +27,17 @@ class blackwidow(object):
 		if self.device is None:
 			self.device = usb.core.find(idVendor=VENDOR_ID, idProduct=PRODUCT_ID_BLACK_WIDOW_2013)
 			if self.device is None:
-				LOG("No device found.\n")
+				LOG("No device found\n")
 				return
 			else:
-				LOG("Found device Black Widow 2013.\n")
+				LOG("Found device: Black Widow 2013\n")
 				detected_keyboard = PRODUCT_ID_BLACK_WIDOW_2013
 		else:
-			LOG("Found device Black Widow.\n")
+			LOG("Found device: Black Widow\n")
 			detected_keyboard = PRODUCT_ID_BLACK_WIDOW
 
 		if self.device.is_kernel_driver_active(USB_INTERFACE):
-			LOG("Kernel driver active. Detaching it.\n")
+			LOG("Kernel driver active; detaching it\n")
 
 		self.device.detach_kernel_driver(USB_INTERFACE)
 		self.kernel_driver_detached = True
@@ -74,9 +74,9 @@ class blackwidow(object):
 			try:
 				result = self.device.ctrl_transfer(USB_REQUEST_TYPE, USB_REQUEST, wValue=USB_VALUE, wIndex=USB_INDEX, data_or_wLength=USB_BUFFER)
 			except:
-				sys.stderr.write("Could not send data.\n")
+				sys.stderr.write("Could not send data\n")
 			if result == len(USB_BUFFER):
-				LOG("Data sent successfully.\n")
+				LOG("Data sent successfully\n")
 			return result
 
 		if isinstance(c, list):
@@ -117,22 +117,28 @@ def main():
 			LOG("Sending led pulsate command\n")
 			bw.send(pulsate)
 		elif options.led == "bright":
-			LOG("Sending led bright command\n")
-			bw.send(no_pulsate + brightness + 'FF')
+			LOG("Sending no pulsate command and led bright command\n")
+			bw.send(no_pulsate)
+			bw.send(brightness + 'FF')
 		elif options.led == "normal":
-			LOG("Sending led normal command\n")
-			bw.send(no_pulsate + brightness + 'a8')
+			LOG("Sending no pulsate command and led normal command\n")
+			bw.send(no_pulsate)
+			bw.send(brightness + 'a8')
 		elif options.led == "dim":
-			LOG("Sending led dim command\n")
-			bw.send(no_pulsate + brightness + '54')
+			LOG("Sending no pulsate command and led dim command\n")
+			bw.send(no_pulsate)
+			bw.send(brightness + '54')
 		elif options.led == "off":
-			LOG("Sending led off command\n")
-			bw.send(no_pulsate + brightness + '00')
+			LOG("Sending no pulsate command and led off command\n")
+			bw.send(no_pulsate)
+			bw.send(brightness + '00')
 		else:
 			try:
 				brightness_level = int(options.led)
 				if brightness_level >= 0 and brightness_level <= 0xFF:
-					bw.send(no_pulsate + brightness + "{0:#0{1}x}".format(brightness_level,4)[2:])
+					LOG("Sending no pulsate command and led command with custom brightness\n")
+					bw.send(no_pulsate)
+					bw.send(brightness + "{0:#0{1}x}".format(brightness_level,4)[2:])
 				else:
 					raise ValueError
 			except ValueError:
@@ -144,16 +150,16 @@ def main():
 		else:
 			if False: # condition for BlackWidow 2016
 				if options.backlight == "bright":
-					LOG("Sending led bright command\n")
+					LOG("Sending blacklight command\n")
 					bw.send(backlight + 'FF')
 				elif options.backlight == "normal":
-					LOG("Sending led normal command\n")
+					LOG("Sending blacklight command\n")
 					bw.send(backlight + 'a8')
 				elif options.backlight == "dim":
-					LOG("Sending led dim command\n")
+					LOG("Sending blacklight command\n")
 					bw.send(backlight + '54')
 				elif options.backlight == "off":
-					LOG("Sending led off command\n")
+					LOG("Sending blacklight command\n")
 					bw.send(backlight + '00')
 				else:
 					try:
@@ -170,7 +176,7 @@ def main():
 		# enable/disable game mode
 		if options.gamemode == "unmodified":
 			pass
-		if options.gamemode == "on":
+		elif options.gamemode == "on":
 			bw.send(gamemode + '01')
 		elif options.gamemode == "off":
 			bw.send(gamemode + '00')
