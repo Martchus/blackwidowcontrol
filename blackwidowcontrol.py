@@ -4,72 +4,85 @@ from optparse import OptionParser
 import usb
 import sys
 
-VENDOR_ID = 0x1532  # Razer
-PRODUCT_ID_BLACK_WIDOW = 0x010e # BlackWidow / BlackWidow Ultimate
-PRODUCT_ID_BLACK_WIDOW_2013 = 0x011b # BlackWidow 2013
-
-USB_REQUEST_TYPE = 0x21  # Host To Device | Class | Interface
-USB_REQUEST = 0x09  # SET_REPORT
+USB_REQUEST_TYPE = 0x21                   # Host To Device | Class | Interface
+USB_REQUEST = 0x09                        # SET_REPORT
 
 USB_VALUE = 0x0300
 USB_INDEX = 0x2
 USB_INTERFACE = 2
 
+VENDOR_ID = 0x1532                        # Razer
+PRODUCT_ID_BLACK_WIDOW = 0x010e           # BlackWidow
+PRODUCT_ID_BLACK_WIDOW_ULTIMATE = 0x011a  # BlackWidow Ultimate
+PRODUCT_ID_BLACK_WIDOW_2013 = 0x011b      # BlackWidow 2013/2014
+
+PRODUCTS = [("Black Widow", PRODUCT_ID_BLACK_WIDOW),
+            ("Black Widow Ultimate", PRODUCT_ID_BLACK_WIDOW_ULTIMATE),
+            ("Black Widow 2013/2014", PRODUCT_ID_BLACK_WIDOW_2013)]
+
 LOG=sys.stderr.write
 
-class blackwidow(object):
-	kernel_driver_detached = False
-	detected_keyboard = None
-
+class BlackWidow(object):
 	def __init__(self):
-		self.device = usb.core.find(idVendor=VENDOR_ID, idProduct=PRODUCT_ID_BLACK_WIDOW)
+		self.kernel_driver_detached = False
+		self.interface_claimed = False
+		self.detected_keyboard = None
 
-		if self.device is None:
-			self.device = usb.core.find(idVendor=VENDOR_ID, idProduct=PRODUCT_ID_BLACK_WIDOW_2013)
-			if self.device is None:
-				LOG("No device found\n")
-				return
-			else:
-				LOG("Found device: Black Widow 2013\n")
-				detected_keyboard = PRODUCT_ID_BLACK_WIDOW_2013
-		else:
-			LOG("Found device: Black Widow\n")
-			detected_keyboard = PRODUCT_ID_BLACK_WIDOW
-
-		if self.device.is_kernel_driver_active(USB_INTERFACE):
-			LOG("Kernel driver active; detaching it\n")
-
-		self.device.detach_kernel_driver(USB_INTERFACE)
-		self.kernel_driver_detached = True
-
-		LOG("Claiming interface\n")
-		usb.util.claim_interface(self.device, USB_INTERFACE)
+		self.find_device()
+		if self.device_found():
+			self.claim_interface()
 
 	def __del__(self):
-		if self.device_found():
+		if self.interface_claimed:
+			self.release_interface()
+
+	def find_device(self):
+		for product_name, product_id in PRODUCTS:
+			self.device = usb.core.find(idVendor=VENDOR_ID, idProduct=product_id)
+			if self.device:
+				detected_keyboard = product_id
+				LOG("Found device: %s\n" % product_name)
+				break
+
+	def device_found(self):
+		return self.device is not None
+
+	def claim_interface(self):
+		try:
+			if self.device.is_kernel_driver_active(USB_INTERFACE):
+				LOG("Kernel driver active; detaching it\n")
+
+			self.device.detach_kernel_driver(USB_INTERFACE)
+			self.kernel_driver_detached = True
+
+			LOG("Claiming interface\n")
+			usb.util.claim_interface(self.device, USB_INTERFACE)
+			self.interface_claimed = True
+		except:
+			LOG("Unable to claim interface. Ensure the script is running as root.\n")
+			raise
+
+	def release_interface(self):
+		if self.interface_claimed:
 			LOG("Releasing claimed interface\n")
 			usb.util.release_interface(self.device, USB_INTERFACE)
 
 			if self.kernel_driver_detached:
 				LOG("Reattaching the kernel driver\n")
 				self.device.attach_kernel_driver(USB_INTERFACE)
-			LOG("Done.\n")
 
-	def bwcmd(self, c):
+	def format_command(self, command):
 		from functools import reduce
-		c1 = bytes.fromhex(c)
+		c1 = bytes.fromhex(command)
 		c2 = [ reduce(int.__xor__, c1) ]
 		b = [0] * 90
 		b[5:5+len(c1)] = c1
 		b[-2:-1] = c2
 		return bytes(b)
 
-	def device_found(self):
-		return self.device is not None
-
-	def send(self, c):
-		def _send(msg):
-			USB_BUFFER = self.bwcmd(msg)
+	def send(self, command):
+		def internal_send(msg):
+			USB_BUFFER = self.format_command(command)
 			result = 0
 			try:
 				result = self.device.ctrl_transfer(USB_REQUEST_TYPE, USB_REQUEST, wValue=USB_VALUE, wIndex=USB_INDEX, data_or_wLength=USB_BUFFER)
@@ -79,14 +92,15 @@ class blackwidow(object):
 				LOG("Data sent successfully\n")
 			return result
 
-		if isinstance(c, list):
-			for i in c:
+		if isinstance(command, list):
+			for i in command:
 				print(' >> {}\n'.format(i))
-				_send(i)
-		elif isinstance(c, str):
-			_send(c)
+				internal_send(i)
+		elif isinstance(command, str):
+			internal_send(command)
 
 def main():
+	#
 	init_new    = '0200 0403'
 	init_old    = '0200 0402'
 	no_pulsate  = '0303 0201 0400'
@@ -103,7 +117,7 @@ def main():
 	parser.add_option("-g", "--set-game-mode", type="string", dest="gamemode", default="unmodified", help="sets whether the game mode is enabled (on/off)")
 	(options, args) = parser.parse_args()
 
-	bw = blackwidow()
+	bw = BlackWidow()
 	if bw.device_found():
 		# enable macro keys
 		if options.init == True:
@@ -182,6 +196,9 @@ def main():
 			bw.send(gamemode + '00')
 		else:
 			LOG("Specified value for game mode is unknown and will be ignored.\n")
+
+	else:
+		LOG("No device found\n")
 
 if __name__ == '__main__':
 	main()
