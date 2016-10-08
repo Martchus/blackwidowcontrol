@@ -2,8 +2,11 @@
 Python 3 script to enable macro keys of BlackWidow keyboard under GNU/Linux
 
 It just enables the macro keys which can then be configured as hotkeys in your desktop environment.
-However it does not enable the ability to record macros and to switch between different configurations
+However, it does not enable the ability to record macros and to switch between different configurations
 like the Windows driver does.
+
+For recording macros under X11 one might use [xmacro](http://download.sarine.nl/xmacro/Description.html)
+or [xdotool](http://www.semicomplete.com/projects/xdotool/).
 
 ## Supported devices
 The script is know to work with the following BlackWidow editions:
