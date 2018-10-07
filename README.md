@@ -9,7 +9,7 @@ For recording macros under X11 one might use [xmacro](http://download.sarine.nl/
 or [xdotool](http://www.semicomplete.com/projects/xdotool/).
 
 ## Supported devices
-The script is know to work with the following BlackWidow editions:
+The script is known to work with the following BlackWidow editions:
 - regular edition (the ceapest one which has no background light)
 - the regular 2013 edition
 - BlackWidow Ultimate Stealth 2014
