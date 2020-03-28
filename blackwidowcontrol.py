@@ -51,8 +51,7 @@ class BlackWidow(object):
 		try:
 			if self.device.is_kernel_driver_active(USB_INTERFACE):
 				LOG("Kernel driver active; detaching it\n")
-
-			self.device.detach_kernel_driver(USB_INTERFACE)
+				self.device.detach_kernel_driver(USB_INTERFACE)
 			self.kernel_driver_detached = True
 
 			LOG("Claiming interface\n")
