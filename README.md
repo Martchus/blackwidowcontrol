@@ -13,6 +13,7 @@ The script is known to work with the following BlackWidow editions:
 - regular edition (the ceapest one which has no background light)
 - the regular 2013 edition
 - BlackWidow Ultimate Stealth 2014
+- BlackWidow Ultimate 2012
 
 If you can confirm that those or other devices work or don't work, let me now by editing this file.
 
