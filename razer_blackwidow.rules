@@ -1,4 +1,5 @@
 # udev rule to initiate BlackWidow keyboards when connected
 SUBSYSTEM=="usb", ACTION=="add", ATTR{idVendor}=="1532", ATTR{idProduct}=="010e", RUN+="/usr/bin/blackwidowcontrol -i"
+SUBSYSTEM=="usb", ACTION=="add", ATTR{idVendor}=="1532", ATTR{idProduct}=="010d", RUN+="/usr/bin/blackwidowcontrol -i"
 SUBSYSTEM=="usb", ACTION=="add", ATTR{idVendor}=="1532", ATTR{idProduct}=="011a", RUN+="/usr/bin/blackwidowcontrol -i"
 SUBSYSTEM=="usb", ACTION=="add", ATTR{idVendor}=="1532", ATTR{idProduct}=="011b", RUN+="/usr/bin/blackwidowcontrol -i"
