@@ -27,5 +27,9 @@ If you can confirm that those or other devices work or don't work, let me now by
 - Use ```-h``` for a list of available options.
 - To invoke the script automatically when the keyboard is plugged-in an udev
   rule can be added (see ```razer_blackwidow.rules```).
-- The repository [PKGBUILDs](https://github.com/Martchus/PKGBUILDs) contains files
-  for building an Arch Linux package.
+
+## Packages
+- Arch Linux: [AUR](https://aur.archlinux.org/packages/blackwidowcontrol),
+  [PKGBUILDs](https://github.com/Martchus/PKGBUILDs), [binary repository](https://martchus.no-ip.biz/repo/arch/ownstuff)
+- openSUSE and Fedora:
+  [OBS](https://software.opensuse.org//download.html?project=home%3Amkittler&package=blackwidowcontrol)
