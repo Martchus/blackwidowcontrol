@@ -159,7 +159,7 @@ def main():
 			except ValueError:
 				LOG("Specified value for led status \"%s\" is unknown and will be ignored.\n" % options.led)
 
-		# experimantal: set backlight (BlackWidow 2016 only)
+		# experimental: set backlight (BlackWidow 2016 only)
 		if options.backlight == "unmodified":
 			pass
 		else:
