@@ -12,12 +12,14 @@ USB_INDEX = 0x2
 USB_INTERFACE = 2
 
 VENDOR_ID = 0x1532                             # Razer
-PRODUCT_ID_BLACK_WIDOW = 0x010e                # BlackWidow
+PRODUCT_ID_BLACK_WIDOW = 0x010e                 # BlackWidow
+PRODUCT_ID_BLACK_WIDOW_V2 = 0x221              # BlackWidow v2 
 PRODUCT_ID_BLACK_WIDOW_ULTIMATE = 0x011a       # BlackWidow Ultimate
 PRODUCT_ID_BLACK_WIDOW_ULTIMATE_2012 = 0x010d  # BlackWidow Ultimate 2012
 PRODUCT_ID_BLACK_WIDOW_2013 = 0x011b           # BlackWidow 2013/2014
 
 PRODUCTS = [("Black Widow", PRODUCT_ID_BLACK_WIDOW),
+			("Black Widow Chroma V2",PRODUCT_ID_BLACK_WIDOW_V2),
             ("Black Widow Ultimate", PRODUCT_ID_BLACK_WIDOW_ULTIMATE),
             ("Black Widow Ultimate 2012", PRODUCT_ID_BLACK_WIDOW_ULTIMATE_2012),
             ("Black Widow 2013/2014", PRODUCT_ID_BLACK_WIDOW_2013)]
