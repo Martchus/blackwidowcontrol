@@ -34,3 +34,20 @@ If you can confirm that those or other devices work or don't work, let me now by
   [PKGBUILDs](https://github.com/Martchus/PKGBUILDs), [binary repository](https://martchus.no-ip.biz/repo/arch/ownstuff)
 - openSUSE and Fedora:
   [OBS](https://software.opensuse.org//download.html?project=home%3Amkittler&package=blackwidowcontrol)
+
+## Copyright notice and license
+The script itself is based on https://finch.am/projects/blackwidow. While the
+original license is unspecified, the author makes it clear that using and
+modified the code is permitted (and even encouraged):
+
+> 2020-08-27 Relatives and descendents of this code have been available in
+various places for many years now, and are probably better maintained. Check
+your distribution's package manager!
+
+---
+
+Copyright © 2012 [finch.am](https://finch.am)
+Copyright © 2015-2022 Marius Kittler
+
+All additions and modifications to the original code are licensed under
+[GPL-2-or-later](LICENSE).
