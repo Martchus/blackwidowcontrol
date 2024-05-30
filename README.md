@@ -31,7 +31,7 @@ If you can confirm that those or other devices work or don't work, let me now by
 
 ## Packages
 - Arch Linux: [AUR](https://aur.archlinux.org/packages/blackwidowcontrol),
-  [PKGBUILDs](https://github.com/Martchus/PKGBUILDs), [binary repository](https://martchus.no-ip.biz/repo/arch/ownstuff)
+  [PKGBUILDs](https://github.com/Martchus/PKGBUILDs), [binary repository](https://martchus.dyn.f3l.de/repo/arch/ownstuff)
 - openSUSE and Fedora:
   [OBS](https://software.opensuse.org//download.html?project=home%3Amkittler&package=blackwidowcontrol)
 
