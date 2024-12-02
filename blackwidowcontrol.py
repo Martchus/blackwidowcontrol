@@ -134,7 +134,7 @@ def main():
 		if options.init == True:
 			LOG("Sending initiation command\n")
 			bw.send(init_old)
-            
+
 		# set led status (doesn't work with BlackWidow 2016 yet)
 		if options.led == "unmodified":
 			pass
