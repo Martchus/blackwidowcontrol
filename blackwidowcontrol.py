@@ -18,13 +18,17 @@ PRODUCT_ID_BLACK_WIDOW_ULTIMATE = 0x011a       # BlackWidow Ultimate
 PRODUCT_ID_BLACK_WIDOW_ULTIMATE_2012 = 0x010d  # BlackWidow Ultimate 2012
 PRODUCT_ID_BLACK_WIDOW_2013 = 0x011b           # BlackWidow 2013/2014
 PRODUCT_ID_BLACK_WIDOW_V4_PRO = 0x028d	       # BlackWIdow V4 Pro
+PRODUCT_ID_BLACK_WIDOW_CHROMA = 0x0203         # BlackWidow Chroma
 
 PRODUCTS = [("Black Widow", PRODUCT_ID_BLACK_WIDOW),
             ("Black Widow Chroma V2",PRODUCT_ID_BLACK_WIDOW_V2),
             ("Black Widow Ultimate", PRODUCT_ID_BLACK_WIDOW_ULTIMATE),
             ("Black Widow Ultimate 2012", PRODUCT_ID_BLACK_WIDOW_ULTIMATE_2012),
             ("Black Widow 2013/2014", PRODUCT_ID_BLACK_WIDOW_2013),
-            ("Black Widow V4 Pro", PRODUCT_ID_BLACK_WIDOW_V4_PRO)]
+            ("Black Widow V4 Pro", PRODUCT_ID_BLACK_WIDOW_V4_PRO),
+            ("Black Widow Chroma", PRODUCT_ID_BLACK_WIDOW_CHROMA)]
+
+BACKLIGHTSUPPORTED_DEVICES = ("Black Widow Chroma", "Placeholder Black Widow 2016")
 
 LOG=sys.stderr.write
 
@@ -33,6 +37,7 @@ class BlackWidow(object):
 		self.kernel_driver_detached = False
 		self.interface_claimed = False
 		self.detected_keyboard = None
+		self.product_name = ""
 
 		self.find_device()
 		if self.device_found():
@@ -48,6 +53,7 @@ class BlackWidow(object):
 			if self.device:
 				detected_keyboard = product_id
 				LOG("Found device: %s\n" % product_name)
+				self.product_name = product_name
 				break
 
 	def device_found(self):
@@ -128,7 +134,7 @@ def main():
 		if options.init == True:
 			LOG("Sending initiation command\n")
 			bw.send(init_old)
-
+            
 		# set led status (doesn't work with BlackWidow 2016 yet)
 		if options.led == "unmodified":
 			pass
@@ -167,7 +173,7 @@ def main():
 		if options.backlight == "unmodified":
 			pass
 		else:
-			if False: # condition for BlackWidow 2016
+			if bw.product_name in BACKLIGHTSUPPORTED_DEVICES: # condition for BlackWidow 2016
 				if options.backlight == "bright":
 					LOG("Sending blacklight command\n")
 					bw.send(backlight + 'FF')
@@ -190,7 +196,7 @@ def main():
 					except ValueError:
 						LOG("Specified value for backlight status \"%s\" is unknown and will be ignored.\n" % options.led)
 			else:
-				LOG("Setting the backlight is not supported by the detected keyboard.")
+				LOG("Setting the backlight is not supported by the detected keyboard.\n")
 
 		# enable/disable game mode
 		if options.gamemode == "unmodified":
