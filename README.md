@@ -15,6 +15,7 @@ The script is known to work with the following BlackWidow editions:
 - BlackWidow Ultimate Stealth 2014
 - BlackWidow Ultimate 2012
 - BlackWidow Chroma V2
+- BlackWidow V4
 - BlackWidow V4 Pro
 
 If you can confirm that those or other devices work or don't work, let me now by editing this file.
