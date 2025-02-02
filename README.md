@@ -10,7 +10,7 @@ or [xdotool](http://www.semicomplete.com/projects/xdotool/).
 
 ## Supported devices
 The script is known to work with the following BlackWidow editions:
-- regular edition (the ceapest one which has no background light)
+- regular edition (the cheapest one which has no background light)
 - the regular 2013 edition
 - BlackWidow Ultimate Stealth 2014
 - BlackWidow Ultimate 2012
