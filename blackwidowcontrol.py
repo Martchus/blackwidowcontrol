@@ -18,6 +18,7 @@ PRODUCT_ID_BLACK_WIDOW_ULTIMATE = 0x011a       # BlackWidow Ultimate
 PRODUCT_ID_BLACK_WIDOW_ULTIMATE_2012 = 0x010d  # BlackWidow Ultimate 2012
 PRODUCT_ID_BLACK_WIDOW_2013 = 0x011b           # BlackWidow 2013/2014
 PRODUCT_ID_BLACK_WIDOW_V4_PRO = 0x028d	       # BlackWIdow V4 Pro
+PRODUCT_ID_BLACK_WIDOW_V4 = 0x0287	           # BlackWIdow V4
 PRODUCT_ID_BLACK_WIDOW_CHROMA = 0x0203         # BlackWidow Chroma
 
 PRODUCTS = [("Black Widow", PRODUCT_ID_BLACK_WIDOW),
@@ -26,6 +27,7 @@ PRODUCTS = [("Black Widow", PRODUCT_ID_BLACK_WIDOW),
             ("Black Widow Ultimate 2012", PRODUCT_ID_BLACK_WIDOW_ULTIMATE_2012),
             ("Black Widow 2013/2014", PRODUCT_ID_BLACK_WIDOW_2013),
             ("Black Widow V4 Pro", PRODUCT_ID_BLACK_WIDOW_V4_PRO),
+            ("Black Widow V4", PRODUCT_ID_BLACK_WIDOW_V4),
             ("Black Widow Chroma", PRODUCT_ID_BLACK_WIDOW_CHROMA)]
 
 BACKLIGHTSUPPORTED_DEVICES = ("Black Widow Chroma", "Placeholder Black Widow 2016")
