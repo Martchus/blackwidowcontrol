@@ -14,6 +14,7 @@ The script is known to work with the following BlackWidow editions:
 - the regular 2013 edition
 - BlackWidow Ultimate Stealth 2014
 - BlackWidow Ultimate 2012
+- BlackWidow Chroma
 - BlackWidow Chroma V2
 - BlackWidow V4
 - BlackWidow V4 Pro
