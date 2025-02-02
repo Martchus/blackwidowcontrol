@@ -49,7 +49,8 @@ your distribution's package manager!
 ---
 
 Copyright © 2012 [finch.am](https://finch.am)
-Copyright © 2015-2022 Marius Kittler
+
+Copyright © 2015-2025 Marius Kittler
 
 All additions and modifications to the original code are licensed under
 [GPL-2-or-later](LICENSE).
