@@ -1,5 +1,5 @@
 # BlackWidow control
-Python 3 script to enable macro keys of BlackWidow keyboard under GNU/Linux
+This is a Python 3 script to enable macro keys of the BlackWidow keyboard under GNU/Linux.
 
 It just enables the macro keys which can then be configured as hotkeys in your desktop environment.
 However, it does not enable the ability to record macros and to switch between different configurations
@@ -41,7 +41,7 @@ If you can confirm that those or other devices work or don't work, let me now by
 ## Copyright notice and license
 The script itself is based on https://finch.am/projects/blackwidow. While the
 original license is unspecified, the author makes it clear that using and
-modified the code is permitted (and even encouraged):
+modifying the code is permitted (and even encouraged):
 
 > 2020-08-27 Relatives and descendents of this code have been available in
 various places for many years now, and are probably better maintained. Check
